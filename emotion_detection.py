@@ -4,7 +4,7 @@ from keras.preprocessing import image
 import cv2
 import numpy as np
 import datetime
-
+import os
 
 def emotion_detection():
     then = datetime.datetime.now()
@@ -12,7 +12,10 @@ def emotion_detection():
     duration = now - then
     duration_in_s = duration.total_seconds()
 
-    face_classifier = cv2.CascadeClassifier(cv2.data.haarcascades + '/haarcascade_frontalface_default.xml')
+    cascPathface = os.path.dirname(
+        cv2.__file__) + "/data/haarcascade_frontalface_alt2.xml"
+    face_classifier = cv2.CascadeClassifier(cascPathface)
+    # face_classifier = cv2.CascadeClassifier(cv2.data.haarcascades + '/haarcascade_frontalface_default.xml')
     classifier = load_model('Models/ven_model_20epochs_final_v6.h5')
 
     emotions = {'Angry': 0, 'Disgust': 0, 'Fear': 0, 'Happy': 0, 'Neutral': 0, 'Sad': 0, 'Surprise': 0}
@@ -24,7 +27,7 @@ def emotion_detection():
         ret, frame = cap.read()
         labels = []
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        faces = face_classifier.detectMultiScale(gray, 1.2, 5)
+        faces = face_classifier.detectMultiScale(gray, 1.1, 5, minSize=(30, 30))
 
         for (x, y, w, h) in faces:
             cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
