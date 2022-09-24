@@ -22,13 +22,14 @@ def emotion_detection():
 
     class_labels = ['Angry', 'Disgust', 'Fear', 'Happy', 'Neutral', 'Sad', 'Surprise']
     # cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-    cap = cv2.imread("images/5cwj2llnspsvqyf8kr.jpg")
+    cap = cv2.imread("images/0u2cwf2h19kdzscvk2.jpg")
 
     while True:
         # ret, frame = cap.read()
         labels = []
         gray = cv2.cvtColor(cap, cv2.COLOR_BGR2GRAY)
         faces = face_classifier.detectMultiScale(gray, 1.1, 5, minSize=(30, 30))
+        print(len(faces))
 
         for (x, y, w, h) in faces:
             cv2.rectangle(cap, (x, y), (x + w, y + h), (255, 0, 0), 2)
@@ -43,7 +44,7 @@ def emotion_detection():
                 preds = classifier.predict(roi)[0]
                 label = class_labels[preds.argmax()]
                 label_position = (x, y)
-                cv2.putText(cap, label, label_position, cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0), 3)
+                cv2.putText(cap, label, label_position, cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 1)
 
                 if label == "Angry":
                     x = emotions.get("Angry")

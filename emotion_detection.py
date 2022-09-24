@@ -23,7 +23,8 @@ def emotion_detection():
     class_labels = ['Angry', 'Disgust', 'Fear', 'Happy', 'Neutral', 'Sad', 'Surprise']
     cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
-    while duration_in_s < 10:
+    # while duration_in_s < 10:
+    while True:
         ret, frame = cap.read()
         labels = []
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -81,7 +82,10 @@ def emotion_detection():
         duration = now - then
         duration_in_s = duration.total_seconds()
 
-        new_value = max(emotions, key=emotions.get)
+        if sum(emotions.values()) > 0:
+            new_value = max(emotions, key=emotions.get)
+        else:
+            new_value = "no emotion detected"
 
         print("Highest value from dictionary:", new_value)
 
@@ -91,7 +95,7 @@ def emotion_detection():
             break
     cap.release()
     cv2.destroyAllWindows()
-    return max(emotions, key=emotions.get)
+    return new_value
 
 
 print("Emotion detected is: ", emotion_detection())
